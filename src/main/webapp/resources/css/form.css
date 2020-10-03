@@ -38,14 +38,16 @@
 .game-form__field {
   margin-top: 10px;
   display: flex;
+  align-items: start;
 }
 
 .game-form__input-wrapper {
   margin-left: 5px;
+  line-height: 150%;
 }
 
 .game-form__label {
-  line-height: calc(150% + 4px);
+  line-height: calc(150% + 2px);
 }
 
 .game-form__submit-button {
@@ -74,6 +76,7 @@
 }
 
 .game-form__input-error {
+  display: block;
   color: var(--error-color);
   transition: all 0.3s;padding: 1px 2px;
   margin: 0;
@@ -82,7 +85,7 @@
 
 .game-form__radio-group {
   display: inline;
-  line-height: calc(150% + 4px);
+  line-height: calc(150% + 2px);
 }
 
 .game-area {

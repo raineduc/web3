@@ -19,7 +19,7 @@
                 <div class="game-form__field">
                     <label for="x-coord" class="game-form__label">Введите X координату: </label>
                     <div class="input-wrapper game-form__input-wrapper">
-                        <h:selectManyCheckbox value="#{gameBean.xCoordinate}" class="game-form__input-table">
+                        <h:selectManyCheckbox value="#{gameBean.xCoordinate}" class="game-form__input-table" id="x-coord" converter="javax.faces.Double">
                             <f:selectItem itemValue="-2" itemLabel="-2" />
                             <f:selectItem itemValue="-1.5" itemLabel="-1.5"/>
                             <f:selectItem itemValue="-1" itemLabel="-1"/>
@@ -30,13 +30,14 @@
                             <f:selectItem itemValue="1.5" itemLabel="1.5"/>
                             <f:selectItem itemValue="2" itemLabel="2"/>
                         </h:selectManyCheckbox>
+                        <h:message for="x-coord" class="game-form__input-error" />
                     </div>
                 </div>
                 <div class="game-form__field">
-                    <label for="y-coord" class="game-form__label">Введите Y координату в пределах (-5,3):</label>
+                    <label for="y-coord" class="game-form__label">Введите Y координату в пределах (-3,5):</label>
                     <div class="input-wrapper game-form__input-wrapper">
                         <h:inputText id="y-coord" class="des-input game-form__coord" value="#{gameBean.yCoordinate}" />
-                        <!--                    <input type="number" id="y-coord" name="y-coord" class="des-input game-form__coord" step="any" />-->
+                        <h:message for="y-coord" class="game-form__input-error" />
                     </div>
                 </div>
                 <div class="game-form__field">
