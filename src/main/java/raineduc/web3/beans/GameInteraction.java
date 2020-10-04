@@ -2,7 +2,7 @@ package raineduc.web3.beans;
 
 
 import org.hibernate.validator.constraints.UniqueElements;
-import raineduc.web3.validation.game.InArray;
+import raineduc.web3.validation.server.game.InArray;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;

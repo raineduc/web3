@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
 <h:head>
     <title>Web 3</title>
     <ui:include src="/templates/head.xhtml"/>
@@ -19,8 +21,9 @@
                 <div class="game-form__field">
                     <label for="x-coord" class="game-form__label">Введите X координату: </label>
                     <div class="input-wrapper game-form__input-wrapper">
-                        <h:selectManyCheckbox value="#{gameBean.xCoordinate}" class="game-form__input-table" id="x-coord" converter="javax.faces.Double">
-                            <f:selectItem itemValue="-2" itemLabel="-2" />
+                        <h:selectManyCheckbox value="#{gameBean.xCoordinate}" class="game-form__input-table"
+                                              id="x-coord" converter="javax.faces.Double" required="true">
+                            <f:selectItem itemValue="-2" itemLabel="-2"/>
                             <f:selectItem itemValue="-1.5" itemLabel="-1.5"/>
                             <f:selectItem itemValue="-1" itemLabel="-1"/>
                             <f:selectItem itemValue="-0.5" itemLabel="-0.5"/>
@@ -29,15 +32,21 @@
                             <f:selectItem itemValue="1" itemLabel="1"/>
                             <f:selectItem itemValue="1.5" itemLabel="1.5"/>
                             <f:selectItem itemValue="2" itemLabel="2"/>
+<!--                            <p:clientValidator />-->
                         </h:selectManyCheckbox>
-                        <h:message for="x-coord" class="game-form__input-error" />
+                        <h:message for="x-coord" class="game-form__input-error"/>
                     </div>
                 </div>
                 <div class="game-form__field">
                     <label for="y-coord" class="game-form__label">Введите Y координату в пределах (-3,5):</label>
                     <div class="input-wrapper game-form__input-wrapper">
-                        <h:inputText id="y-coord" class="des-input game-form__coord" value="#{gameBean.yCoordinate}" />
-                        <h:message for="y-coord" class="game-form__input-error" />
+                        <h:inputText id="y-coord" class="des-input game-form__coord" value="#{gameBean.yCoordinate}"
+                                     required="true">
+                            <f:validator validatorId="game_form.InputTextValidator" />
+                            <f:convertNumber maxIntegerDigits="8" maxFractionDigits="5" minFractionDigits="1" groupingUsed="false" />
+<!--                            <p:clientValidator />-->
+                        </h:inputText>
+                        <h:message for="y-coord" class="game-form__input-error"/>
                     </div>
                 </div>
                 <div class="game-form__field">
@@ -45,24 +54,24 @@
                     <div class="input-wrapper game-form__input-wrapper">
                         <f:ajax execute="@form" render="@form" listener="#{gameBean.handleAjax}">
                             <h:commandLink value="1" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}" />
+                                <f:param value="#{gameBean.radius}"/>
                             </h:commandLink>
                             <h:commandLink value="2" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}" />
+                                <f:param value="#{gameBean.radius}"/>
                             </h:commandLink>
                             <h:commandLink value="3" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}" />
+                                <f:param value="#{gameBean.radius}"/>
                             </h:commandLink>
                             <h:commandLink value="4" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}" />
+                                <f:param value="#{gameBean.radius}"/>
                             </h:commandLink>
                             <h:commandLink value="5" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}" />
+                                <f:param value="#{gameBean.radius}"/>
                             </h:commandLink>
                         </f:ajax>
                     </div>
                 </div>
-<!--                <button class="des-button game-form__submit-button">Отправить</button>-->
+                <!--                <button class="des-button game-form__submit-button">Отправить</button>-->
             </h:form>
             <div class="game-area">
                 <canvas class="game-area__image" width="420" height="420"/>

@@ -1,4 +1,4 @@
-package raineduc.web3.validation.game;
+package raineduc.web3.validation.server.game;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

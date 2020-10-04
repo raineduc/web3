@@ -1,10 +1,9 @@
-package raineduc.web3.validation.game;
+package raineduc.web3.validation.server.game;
 
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
 
