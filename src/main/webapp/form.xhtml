@@ -41,7 +41,7 @@
                     <label for="y-coord" class="game-form__label">Введите Y координату в пределах (-3,5):</label>
                     <div class="input-wrapper game-form__input-wrapper">
                         <h:inputText id="y-coord" class="des-input game-form__coord" value="#{gameBean.yCoordinate}"
-                                     required="true">
+                                     required="true" converter="javax.faces.Double">
                             <f:validator validatorId="game_form.InputTextValidator" />
                             <f:convertNumber maxIntegerDigits="8" maxFractionDigits="5" minFractionDigits="1" groupingUsed="false" />
 <!--                            <p:clientValidator />-->
@@ -79,5 +79,6 @@
         </div>
         <div class="game-results"></div>
     </div>
+    <h:outputScript name="bundle.js" library="js" />
 </h:body>
 </html>

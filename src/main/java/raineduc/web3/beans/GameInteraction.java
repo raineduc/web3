@@ -7,6 +7,7 @@ import raineduc.web3.validation.server.game.InArray;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 @ManagedBean(name="gameBean")
@@ -19,7 +20,7 @@ public class GameInteraction {
     @DecimalMin(value = "-2.99999", message = "Y координата должна быть меньше 5")
     @DecimalMax(value = "4.99999", message = "Y координата должна быть больше - 3")
     @Digits(integer = 8, fraction = 5, message = "Y должнен быть числом с не более чем 8 цифрами в целой части и 5 цифрами в дробной части")
-    private double yCoordinate;
+    private BigDecimal yCoordinate;
     @NotNull(message = "Радиус должен быть указан")
     @Min(value = 1, message = "Радиус должен быть больше или равен 1")
     @Max(value = 5, message = "Радиус должен быть меньше или равен 5")
@@ -29,7 +30,7 @@ public class GameInteraction {
         this.xCoordinate = xCoordinate;
     }
 
-    public void setyCoordinate(double yCoordinate) {
+    public void setyCoordinate(BigDecimal yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 
@@ -41,7 +42,7 @@ public class GameInteraction {
         return xCoordinate;
     }
 
-    public double getyCoordinate() {
+    public BigDecimal getyCoordinate() {
         return yCoordinate;
     }
 
