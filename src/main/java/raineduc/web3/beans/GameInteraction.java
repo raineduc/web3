@@ -15,7 +15,7 @@ import java.util.Collection;
 public class GameInteraction {
     @UniqueElements(message = "Значения X должеы быть разными")
     @Size(min = 1, max = 9, message = "Количество значений X должно быть в пределах [1, 9]")
-    private Collection<@InArray(array = {1, 2})  Double> xCoordinate;
+    private Collection<@InArray(array = {-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2})  Double> xCoordinate;
     @NotNull(message = "Y координата не должна быть пустой")
     @DecimalMin(value = "-2.99999", message = "Y координата должна быть меньше 5")
     @DecimalMax(value = "4.99999", message = "Y координата должна быть больше - 3")

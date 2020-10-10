@@ -19,7 +19,7 @@
 
 .game-form__input-table {
   height: 100%;
-  border-spacing: 2px 0;
+  border-spacing: 8px 0;
 }
 
 .game-form__input-table td * {
@@ -91,6 +91,16 @@
 .game-area {
   border: 1px solid rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  padding: 5px;
+  text-align: center;
+}
+
+.game-area__image {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.game-area__slider {
+  width: 80%;
 }
 
 @media screen and (max-width: 1190px) {
