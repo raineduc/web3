@@ -56,21 +56,26 @@
                 <div class="game-form__field">
                     <span class="game-form__label">Введите параметр R: </span>
                     <div class="input-wrapper game-form__input-wrapper">
-                        <f:ajax execute="@form" render="@form" listener="#{gameBean.handleAjax}">
-                            <p:commandLink value="1" class="des-button game-form__radius_button" validateClient="true">
-                                <f:param value="#{gameBean.radius}"/>
+                        <f:ajax execute="@form" render="@form game-results">
+                            <p:commandLink value="1" class="des-button game-form__radius_button" validateClient="true"
+                                           action="#{gameBean.handleAjax}">
+                                <f:setPropertyActionListener value="1" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="2" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}"/>
+                            <p:commandLink value="2" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                                           validateClient="true">
+                                <f:setPropertyActionListener value="2" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="3" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}"/>
+                            <p:commandLink value="3" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                                           validateClient="true">
+                                <f:setPropertyActionListener value="3" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="4" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}"/>
+                            <p:commandLink value="4" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                                           validateClient="true">
+                                <f:setPropertyActionListener value="4" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="5" class="des-button game-form__radius_button">
-                                <f:param value="#{gameBean.radius}"/>
+                            <p:commandLink value="5" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                                           validateClient="true">
+                                <f:setPropertyActionListener value="5" target="#{gameBean.radius}" />
                             </p:commandLink>
                         </f:ajax>
                     </div>
@@ -91,13 +96,16 @@
                     <h:inputHidden value="#{gameBean.xCoordinate}" pt:class="game-area__x-coord" converter="Coordinate" />
                     <h:inputHidden value="#{gameBean.yCoordinate}" pt:class="game-area__y-coord" converter="Coordinate" />
                     <p:remoteCommand name="_jsf_sendHit" actionListener="#{gameBean.handleGameAreaAjax}"
-                                     update="click__message" process="@form" />
+                                     update="click__message game-results" process="@form" />
                     <p:growl id="click__message" />
-                    <h:commandButton value="tik" actionListener="#{gameBean.handleGameAreaAjax}" />
                 </h:form>
             </div>
         </div>
-        <div class="game-results"></div>
+        <h:panelGroup id="game-results">
+            <div class="game-results">
+                <ui:include src="/templates/table.xhtml" />
+            </div>
+        </h:panelGroup>
     </div>
     <h:outputScript name="bundle.js" library="js"/>
 </h:body>

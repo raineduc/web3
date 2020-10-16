@@ -1,19 +1,23 @@
 package raineduc.web3.beans;
 
 import org.hibernate.validator.constraints.UniqueElements;
+import raineduc.web3.entities.Hit;
 import raineduc.web3.validation.server.game.InArray;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
 @Named("gameBean")
 @RequestScoped
-public class GameInteraction implements Serializable {
+public class HitBean implements Serializable {
     @UniqueElements(message = "Значения X должны быть разными")
     @Size(min = 1, max = 9, message = "Количество значений X должно быть в пределах [1, 9]")
     private Collection<@InArray(array = {-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2})  Double> xCoordinates;
@@ -30,6 +34,13 @@ public class GameInteraction implements Serializable {
     @Min(value = 1, message = "Радиус должен быть больше или равен 1")
     @Max(value = 5, message = "Радиус должен быть меньше или равен 5")
     private int radius;
+    private boolean hit;
+    @Inject
+    private HitResults hitResults;
+
+    public boolean isHit() {
+        return hit;
+    }
 
     public BigDecimal getxCoordinate() {
         return xCoordinate;
@@ -63,22 +74,40 @@ public class GameInteraction implements Serializable {
         return radius;
     }
 
-    public void handleAjax(javax.faces.event.AjaxBehaviorEvent event) throws javax.faces.event.AbortProcessingException {
-        int i = 3;
-        System.out.println(yCoordinate);
+    public String handleAjax() throws javax.faces.event.AbortProcessingException {
+        for (Double xCoord: xCoordinates) {
+            hit = isPointInArea(xCoord, yCoordinate.doubleValue(), radius);
+            Hit hitObject = new Hit(xCoord, yCoordinate.doubleValue(), radius, hit);
+            hitResults.addHit(hitObject);
+        }
+        return null;
     }
 
     public void handleGameAreaAjax() throws javax.faces.event.AbortProcessingException {
-        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-//        Double x = Double.valueOf(params.get("xCoordinates"));
-//        ArrayList<Double> xList = new ArrayList<>();
-//        xList.add(x);
-//        setxCoordinates(xList);
-//        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//        Set<ConstraintViolation<GameInteraction>> violations = validator.validateProperty(this, "xCoordinates");
-//        for (ConstraintViolation<GameInteraction> violation: violations) {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, violation.getMessage(), "message error"));
-//            return;
-//        }
+        hit = isPointInArea(xCoordinate.doubleValue(), yCoordinate.doubleValue(), radius);
+        xCoordinates.add(xCoordinate.doubleValue());
+        Hit hitObject = new Hit(xCoordinate.doubleValue(), yCoordinate.doubleValue(), radius, hit);
+        hitResults.addHit(hitObject);
+    }
+
+    @PostConstruct
+    public void init() {
+        xCoordinates = new ArrayList<>();
+    }
+
+    private boolean isPointInArea(double x, double y, int radius) {
+        return isPointInCircle(x, y, radius) || isPointInSquare(x, y, radius) || isPointInTriangle(x, y, radius);
+    }
+
+    private boolean isPointInSquare(double x, double y, int radius) {
+        return x >= 0 && y >= 0 && x <= radius && y <= radius;
+    }
+
+    private boolean isPointInTriangle(double x, double y, int radius) {
+        return x <= 0 && y <= 0 && y >= (-x - radius/2d);
+    }
+
+    private boolean isPointInCircle(double x, double y, int radius) {
+        return x >= 0 && y <= 0 && Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(radius, 2);
     }
 }

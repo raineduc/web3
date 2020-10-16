@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition>
+    <div class="des-table-wrapper game-results__wrapper">
+        <table class="des-table game-results__table">
+            <thead>
+            <tr>
+                <th class="des-table__th">Координата X</th>
+                <th class="des-table__th">Координата Y</th>
+                <th class="des-table__th">Радиус R</th>
+                <th class="des-table__th">Результат</th>
+            </tr>
+            </thead>
+            <tbody class="des-table__body">
+            <ui:repeat value="#{HitResults.hits}" var="hit">
+                <tr class="des-table__tr">
+                    <td class="des-table__td">#{hit.xCoordinate}</td>
+                    <td class="des-table__td">#{hit.yCoordinate}</td>
+                    <td class="des-table__td">#{hit.radius}</td>
+                    <td class="des-table__td">#{hit.hit ? "Попал" : "Не попал"}</td>
+                </tr>
+            </ui:repeat>
+            </tbody>
+        </table>
+    </div>
+</ui:composition>
+</html>
