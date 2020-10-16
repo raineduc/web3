@@ -1,28 +1,18 @@
 package raineduc.web3.beans;
 
-
 import org.hibernate.validator.constraints.UniqueElements;
 import raineduc.web3.validation.server.game.InArray;
-
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.inject.Named;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
-@ManagedBean(name="gameBean")
-@SessionScoped
+@Named("gameBean")
+@RequestScoped
 public class GameInteraction implements Serializable {
     @UniqueElements(message = "Значения X должны быть разными")
     @Size(min = 1, max = 9, message = "Количество значений X должно быть в пределах [1, 9]")
