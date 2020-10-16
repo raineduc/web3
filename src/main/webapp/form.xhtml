@@ -5,6 +5,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions"
 >
 <h:head>
     <title>Web 3</title>
@@ -21,7 +24,7 @@
                 <div class="game-form__field">
                     <label for="x-coord" class="game-form__label">Введите X координату: </label>
                     <div class="input-wrapper game-form__input-wrapper">
-                        <h:selectManyCheckbox value="#{gameBean.xCoordinate}" class="game-form__input-table"
+                        <h:selectManyCheckbox value="#{gameBean.xCoordinates}" class="game-form__input-table"
                                               id="x-coord" converter="javax.faces.Double" required="true">
                             <f:selectItem itemValue="-2" itemLabel="-2"/>
                             <f:selectItem itemValue="-1.5" itemLabel="-1.5"/>
@@ -32,7 +35,7 @@
                             <f:selectItem itemValue="1" itemLabel="1"/>
                             <f:selectItem itemValue="1.5" itemLabel="1.5"/>
                             <f:selectItem itemValue="2" itemLabel="2"/>
-                            <p:clientValidator />
+                            <p:clientValidator/>
                         </h:selectManyCheckbox>
                         <h:message for="x-coord" class="game-form__input-error"/>
                     </div>
@@ -41,10 +44,11 @@
                     <label for="y-coord" class="game-form__label">Введите Y координату в пределах (-3,5):</label>
                     <div class="input-wrapper game-form__input-wrapper">
                         <h:inputText id="y-coord" class="des-input game-form__coord" value="#{gameBean.yCoordinate}"
-                                     required="true" converter="javax.faces.Double">
-                            <f:validator validatorId="game_form.InputTextValidator" />
-                            <f:convertNumber maxIntegerDigits="8" maxFractionDigits="5" minFractionDigits="1" groupingUsed="false" />
-                            <p:clientValidator />
+                                     required="true" converter="javax.faces.BigDecimal">
+                            <f:validator validatorId="game_form.InputTextValidator"/>
+                            <f:convertNumber maxIntegerDigits="8" maxFractionDigits="5" minFractionDigits="1"
+                                             groupingUsed="false"/>
+                            <p:clientValidator/>
                         </h:inputText>
                         <h:message for="y-coord" class="game-form__input-error"/>
                     </div>
@@ -71,21 +75,30 @@
                         </f:ajax>
                     </div>
                 </div>
-                <!--                <button class="des-button game-form__submit-button">Отправить</button>-->
             </h:form>
             <div class="game-area">
-                <canvas class="game-area__image" width="420" height="420"/>
-                <br />
-                <div class="game-area__radius-slider">
-                    <label for="game-area-slider" class="game-form__label">Радиус: </label>
-                    <div class="game-form__input-wrapper">
-                        <input type="range" min="1" max="5" step="1" class="game-area__slider" id="game-area-slider" />
+                <h:form>
+                    <canvas class="game-area__image" width="420" height="420"/>
+                    <br/>
+                    <div class="game-area__radius-slider">
+                        <label for="game-area__radius" class="game-form__label">Радиус: </label>
+                        <div class="game-form__input-wrapper">
+                            <h:inputHidden value="#{gameBean.radius}" id="game-area__radius" pt:class="game-area__radius" />
+                            <input type="range" min="1" max="5" step="1" class="game-area__slider"
+                                   id="game-area-slider"/>
+                        </div>
                     </div>
-                </div>
+                    <h:inputHidden value="#{gameBean.xCoordinate}" pt:class="game-area__x-coord" converter="Coordinate" />
+                    <h:inputHidden value="#{gameBean.yCoordinate}" pt:class="game-area__y-coord" converter="Coordinate" />
+                    <p:remoteCommand name="_jsf_sendHit" actionListener="#{gameBean.handleGameAreaAjax}"
+                                     update="click__message" process="@form" />
+                    <p:growl id="click__message" />
+                    <h:commandButton value="tik" actionListener="#{gameBean.handleGameAreaAjax}" />
+                </h:form>
             </div>
         </div>
         <div class="game-results"></div>
     </div>
-    <h:outputScript name="bundle.js" library="js" />
+    <h:outputScript name="bundle.js" library="js"/>
 </h:body>
 </html>
