@@ -1,9 +1,22 @@
 package raineduc.web3.entities;
 
+import javax.persistence.*;
+
+@Entity
 public class Hit {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
+    private Long id;
+
+    @Column(nullable = false)
     private double xCoordinate;
+    @Column(nullable = false)
     private double yCoordinate;
+    @Column(nullable = false)
     private int radius;
+    @Column(nullable = false)
     private boolean hit;
 
     public Hit() {};

@@ -7,6 +7,9 @@
     <artifactId>web3</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
+    <properties>
+        <hibernate-version>5.4.22.Final</hibernate-version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -37,13 +40,16 @@
             <artifactId>omnifaces</artifactId>
             <version>3.8</version>
         </dependency>
-
-
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>6.1.6.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.4.22.Final</version>
         </dependency>
 
     </dependencies>

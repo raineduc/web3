@@ -5,9 +5,15 @@ import raineduc.web3.entities.Hit;
 import raineduc.web3.validation.server.game.InArray;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,9 +24,13 @@ import java.util.Map;
 @Named("gameBean")
 @RequestScoped
 public class HitBean implements Serializable {
+    @Inject
+    private UserTransaction transaction;
+    @PersistenceContext(unitName = "WebLab3")
+    private EntityManager entityManager;
     @UniqueElements(message = "Значения X должны быть разными")
     @Size(min = 1, max = 9, message = "Количество значений X должно быть в пределах [1, 9]")
-    private Collection<@InArray(array = {-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2})  Double> xCoordinates;
+    private Collection<@InArray(array = {-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2}) Double> xCoordinates;
     @NotNull(message = "Y координата не должна быть пустой")
     @DecimalMin(value = "-7.99999", message = "Y координата должна быть больше - 3")
     @DecimalMax(value = "7.99999", message = "Y координата должна быть меньше 5")
@@ -75,19 +85,28 @@ public class HitBean implements Serializable {
     }
 
     public String handleAjax() throws javax.faces.event.AbortProcessingException {
-        for (Double xCoord: xCoordinates) {
-            hit = isPointInArea(xCoord, yCoordinate.doubleValue(), radius);
-            Hit hitObject = new Hit(xCoord, yCoordinate.doubleValue(), radius, hit);
-            hitResults.addHit(hitObject);
+        try {
+            transaction.begin();
+            for (Double xCoord : xCoordinates) {
+                hit = isPointInArea(xCoord, yCoordinate.doubleValue(), radius);
+                Hit hitObject = new Hit(xCoord, yCoordinate.doubleValue(), radius, hit);
+                entityManager.persist(hitObject);
+                entityManager.flush();
+                entityManager.clear();
+                hitResults.addHit(hitObject);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage("Database error", "Could not save records to the database"));
         }
         return null;
     }
 
     public void handleGameAreaAjax() throws javax.faces.event.AbortProcessingException {
-        hit = isPointInArea(xCoordinate.doubleValue(), yCoordinate.doubleValue(), radius);
+        xCoordinates = new ArrayList<>();
         xCoordinates.add(xCoordinate.doubleValue());
-        Hit hitObject = new Hit(xCoordinate.doubleValue(), yCoordinate.doubleValue(), radius, hit);
-        hitResults.addHit(hitObject);
+        handleAjax();
     }
 
     @PostConstruct
@@ -104,7 +123,7 @@ public class HitBean implements Serializable {
     }
 
     private boolean isPointInTriangle(double x, double y, int radius) {
-        return x <= 0 && y <= 0 && y >= (-x - radius/2d);
+        return x <= 0 && y <= 0 && y >= (-x - radius / 2d);
     }
 
     private boolean isPointInCircle(double x, double y, int radius) {
