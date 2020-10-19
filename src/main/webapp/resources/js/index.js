@@ -13,7 +13,6 @@ let canvasHits = [];
 
 let radius = parseInt(radiusSlider.value);
 
-
 // Should be loaded by JSF (function's declarated in form.xhtml)
 const _jsf_sendHit = window._jsf_sendHit || function (array) {
 };
