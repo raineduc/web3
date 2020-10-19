@@ -1,6 +1,9 @@
 package raineduc.web3.beans;
 
 import org.hibernate.validator.constraints.UniqueElements;
+import org.primefaces.PrimeFaces;
+import org.primefaces.shaded.json.JSONArray;
+import org.primefaces.shaded.json.JSONObject;
 import raineduc.web3.entities.hit.Hit;
 import raineduc.web3.entities.hit.HitDao;
 import raineduc.web3.validation.server.game.InArray;
@@ -47,13 +50,8 @@ public class HitBean implements Serializable {
     @Min(value = 1, message = "Радиус должен быть больше или равен 1")
     @Max(value = 5, message = "Радиус должен быть меньше или равен 5")
     private int radius;
-    private boolean hit;
     @Inject
     private HitResults hitResults;
-
-    public boolean isHit() {
-        return hit;
-    }
 
     public BigDecimal getxCoordinate() {
         return xCoordinate;
@@ -89,11 +87,13 @@ public class HitBean implements Serializable {
 
     public String handleAjax() throws javax.faces.event.AbortProcessingException {
         try {
-            List<Hit> hits = xCoordinates.stream().map(x -> new Hit(x, yCoordinate.doubleValue(), radius, hit)).collect(Collectors.toList());
+            List<Hit> hits = xCoordinates.stream()
+                    .map(x -> new Hit(x, yCoordinate.doubleValue(), radius, isPointInArea(x, yCoordinate.doubleValue(), radius))).collect(Collectors.toList());
             hitDao.addHits(hits);
             for (Hit hitObject: hits) {
                 hitResults.addHit(hitObject);
             }
+            addParamsToResponse(hits);
         } catch (Exception e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage("Database error", "Could not save records to the database"));
@@ -112,6 +112,11 @@ public class HitBean implements Serializable {
         xCoordinates = new ArrayList<>();
     }
 
+    private void addParamsToResponse(List<Hit> hits) {
+        PrimeFaces.Ajax ajax =  PrimeFaces.current().ajax();
+        ajax.addCallbackParam("hits", buildHitsJsonArray(hits));
+    }
+
     private boolean isPointInArea(double x, double y, int radius) {
         return isPointInCircle(x, y, radius) || isPointInSquare(x, y, radius) || isPointInTriangle(x, y, radius);
     }
@@ -126,5 +131,17 @@ public class HitBean implements Serializable {
 
     private boolean isPointInCircle(double x, double y, int radius) {
         return x >= 0 && y <= 0 && Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(radius, 2);
+    }
+
+    private JSONArray buildHitsJsonArray(List<Hit> hits) {
+        JSONArray jsonArray = new JSONArray();
+        for (Hit hit: hits) {
+            JSONObject jsonObject = new JSONObject()
+                    .put("x", hit.getxCoordinate())
+                    .put("y", hit.getyCoordinate())
+                    .put("result", hit.isHit());
+            jsonArray.put(jsonObject);
+        }
+        return jsonArray;
     }
 }

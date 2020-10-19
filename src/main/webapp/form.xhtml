@@ -14,6 +14,7 @@
     <ui:include src="/templates/head.xhtml"/>
     <h:outputStylesheet name="form.css" library="css"/>
     <h:outputStylesheet name="table.css" library="css"/>
+    <h:outputScript name="jsf-callbacks.js" library="js"/>
 </h:head>
 
 <h:body>
@@ -57,23 +58,23 @@
                     <span class="game-form__label">Введите параметр R: </span>
                     <div class="input-wrapper game-form__input-wrapper">
                         <f:ajax execute="@form" render="@form game-results">
-                            <p:commandLink value="1" class="des-button game-form__radius_button" validateClient="true"
+                            <p:commandLink value="1" class="des-button game-form__radius_button" validateClient="true" oncomplete="_jsf_addPoints(xhr, status, args)"
                                            action="#{gameBean.handleAjax}">
                                 <f:setPropertyActionListener value="1" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="2" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                            <p:commandLink value="2" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}" oncomplete="_jsf_addPoints(xhr, status, args)"
                                            validateClient="true">
                                 <f:setPropertyActionListener value="2" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="3" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                            <p:commandLink value="3" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}" oncomplete="_jsf_addPoints(xhr, status, args)"
                                            validateClient="true">
                                 <f:setPropertyActionListener value="3" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="4" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                            <p:commandLink value="4" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}" oncomplete="_jsf_addPoints(xhr, status, args)"
                                            validateClient="true">
                                 <f:setPropertyActionListener value="4" target="#{gameBean.radius}" />
                             </p:commandLink>
-                            <p:commandLink value="5" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}"
+                            <p:commandLink value="5" class="des-button game-form__radius_button" action="#{gameBean.handleAjax}" oncomplete="_jsf_addPoints(xhr, status, args)"
                                            validateClient="true">
                                 <f:setPropertyActionListener value="5" target="#{gameBean.radius}" />
                             </p:commandLink>
@@ -95,7 +96,7 @@
                     </div>
                     <h:inputHidden value="#{gameBean.xCoordinate}" pt:class="game-area__x-coord" converter="Coordinate" />
                     <h:inputHidden value="#{gameBean.yCoordinate}" pt:class="game-area__y-coord" converter="Coordinate" />
-                    <p:remoteCommand name="_jsf_sendHit" actionListener="#{gameBean.handleGameAreaAjax}"
+                    <p:remoteCommand name="_jsf_sendHit" actionListener="#{gameBean.handleGameAreaAjax}" oncomplete="_jsf_addPoints(xhr, status, args)"
                                      update="click__message game-results" process="@form" />
                     <p:growl id="click__message" />
                 </h:form>

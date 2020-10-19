@@ -1,5 +1,5 @@
-import { draw as drawArea, translateCanvasCoordsToRCoords } from "./game-area";
-import { Point } from "./point";
+import {draw as drawArea, translateCanvasCoordsToRCoords} from "./game-area/game-area";
+import {Point} from "./game-area/point";
 
 const canvas = document.querySelector('.game-area__image');
 
@@ -9,27 +9,30 @@ const xInput = document.querySelector(".game-area__x-coord");
 const yInput = document.querySelector(".game-area__y-coord");
 const radiusInput = document.querySelector(".game-area__radius");
 
-const allowedXValues = [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2];
+let canvasHits = [];
 
 let radius = parseInt(radiusSlider.value);
 
 
 // Should be loaded by JSF (function's declarated in form.xhtml)
-console.log(globalThis);
+const _jsf_sendHit = window._jsf_sendHit || function (array) {
+};
 
-const _jsf_sendHit = window._jsf_sendHit || function (array) {};
-
-
+window._jsf_handleAddPointsCallback = function (xhr, status, args) {
+    if (args && args.hits) {
+        canvasHits = canvasHits.concat(args.hits.map(hit => new Point(hit.x, hit.y, hit.result)));
+        drawArea([radius], canvasHits);
+    }
+}
 
 radiusSlider.addEventListener("input", (e) => {
     radius = parseInt(radiusSlider.value);
-    drawArea([radius]);
+    drawArea([radius], canvasHits);
 })
 
 canvas.addEventListener("click", event => {
 
     const point = new Point(event.offsetX, event.offsetY);
-    drawArea([parseInt(radiusSlider.value)], point);
     const pointInArea = translateCanvasCoordsToRCoords(point, [radius]);
     xInput.value = `${pointInArea.getX()}`;
     yInput.value = `${pointInArea.getY()}`;
