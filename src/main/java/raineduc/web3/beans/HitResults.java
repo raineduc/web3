@@ -1,15 +1,14 @@
 package raineduc.web3.beans;
 
-import raineduc.web3.entities.Hit;
+import raineduc.web3.entities.hit.Hit;
+import raineduc.web3.entities.hit.HitDao;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 import java.io.Serializable;
@@ -17,12 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named("HitResults")
-@SessionScoped
-public class HitResults implements Serializable {
+@ApplicationScoped
+public class HitResults {
     @Inject
     private UserTransaction transaction;
+
     @PersistenceContext(unitName = "WebLab3")
     private EntityManager entityManager;
+
+    @Inject
+    private HitDao hitDao;
 
     private List<Hit> hits;
 
@@ -40,12 +43,6 @@ public class HitResults implements Serializable {
 
     @PostConstruct
     public void init() {
-        try {
-            transaction.begin();
-            hits = entityManager.createQuery("SELECT hit FROM Hit hit", Hit.class).getResultList();
-            transaction.commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        hits = hitDao.getAllHits();
     }
 }

@@ -1,4 +1,4 @@
-package raineduc.web3.entities;
+package raineduc.web3.entities.hit;
 
 import javax.persistence.*;
 

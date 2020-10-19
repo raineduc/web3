@@ -1,11 +1,11 @@
 package raineduc.web3.beans;
 
 import org.hibernate.validator.constraints.UniqueElements;
-import raineduc.web3.entities.Hit;
+import raineduc.web3.entities.hit.Hit;
+import raineduc.web3.entities.hit.HitDao;
 import raineduc.web3.validation.server.game.InArray;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -19,11 +19,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Named("gameBean")
 @RequestScoped
 public class HitBean implements Serializable {
+    @Inject
+    private HitDao hitDao;
     @Inject
     private UserTransaction transaction;
     @PersistenceContext(unitName = "WebLab3")
@@ -86,16 +89,11 @@ public class HitBean implements Serializable {
 
     public String handleAjax() throws javax.faces.event.AbortProcessingException {
         try {
-            transaction.begin();
-            for (Double xCoord : xCoordinates) {
-                hit = isPointInArea(xCoord, yCoordinate.doubleValue(), radius);
-                Hit hitObject = new Hit(xCoord, yCoordinate.doubleValue(), radius, hit);
-                entityManager.persist(hitObject);
-                entityManager.flush();
-                entityManager.clear();
+            List<Hit> hits = xCoordinates.stream().map(x -> new Hit(x, yCoordinate.doubleValue(), radius, hit)).collect(Collectors.toList());
+            hitDao.addHits(hits);
+            for (Hit hitObject: hits) {
                 hitResults.addHit(hitObject);
             }
-            transaction.commit();
         } catch (Exception e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage("Database error", "Could not save records to the database"));
