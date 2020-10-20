@@ -19,7 +19,7 @@ public class HitDaoImpl implements HitDao {
     public List<Hit> getAllHits() {
         try {
             transaction.begin();
-            List<Hit> hits = entityManager.createQuery("SELECT hit FROM Hit hit", Hit.class).getResultList();
+            List<Hit> hits = entityManager.createQuery("SELECT hit FROM Hit hit ORDER BY hit.id DESC", Hit.class).getResultList();
             transaction.commit();
             return hits;
         } catch (Exception e) {

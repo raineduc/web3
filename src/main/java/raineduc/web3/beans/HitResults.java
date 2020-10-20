@@ -5,44 +5,33 @@ import raineduc.web3.entities.hit.HitDao;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 @Named("HitResults")
 @ApplicationScoped
 public class HitResults {
     @Inject
-    private UserTransaction transaction;
-
-    @PersistenceContext(unitName = "WebLab3")
-    private EntityManager entityManager;
-
-    @Inject
     private HitDao hitDao;
 
-    private List<Hit> hits;
+    private Deque<Hit> hits;
 
-    public List<Hit> getHits() {
+    public Deque<Hit> getHits() {
         return hits;
     }
 
-    public void setHits(ArrayList<Hit> hits) {
+    public void setHits(Deque<Hit> hits) {
         this.hits = hits;
     }
 
     public void addHit(Hit hit) {
-        hits.add(hit);
+        hits.addFirst(hit);
     }
 
     @PostConstruct
     public void init() {
-        hits = hitDao.getAllHits();
+        hits = new ArrayDeque<>(hitDao.getAllHits());
     }
 }

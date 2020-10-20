@@ -1,18 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns = "http://www.w3.org/1999/xhtml"
-      xmlns:h = "http://java.sun.com/jsf/html"
-      xmlns:f = "http://java.sun.com/jsf/core"
-      xmlns:ui = "http://java.sun.com/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+>
 
-   <h:head>
-      <title>Home page</title>
-      <ui:include src="/templates/head.xhtml" />
-   </h:head>
+<h:head>
+    <title>Home page</title>
+    <ui:include src="/templates/head.xhtml"/>
+    <h:outputStylesheet name="home.css" library="css"/>
+</h:head>
 
-   <h:body>
-      <ui:include src="/templates/header.xhtml" />
-      <div class="homepage-body">
-      </div>
-   </h:body>
+<h:body>
+    <ui:include src="/templates/header.xhtml"/>
+    <div class="homepage-body">
+        <h:form>
+            <p:remoteCommand name="_jsf_requestCurrentDate" actionListener="#{dateBean.requestCurrentDate}"
+                             update="current_date"/>
+        </h:form>
+        <div class="date-wrapper">
+            <h:panelGroup id="current_date">
+                <time class="date-wrapper__time">
+                    <h:outputText value="#{dateBean.currentDate}">
+                        <f:convertDateTime pattern="HH:mm:ss" timeZone="#{dateBean.timezone}"/>
+                    </h:outputText>
+                </time>
+                <p class="date-wrapper__date">
+                    Дата:
+                    <time>
+                        <h:outputText value="#{dateBean.currentDate}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" timeZone="#{dateBean.timezone}"/>
+                        </h:outputText>
+                    </time>
+                </p>
+            </h:panelGroup>
+        </div>
+    </div>
+    <h:outputScript name="request-date.js" library="js"/>
+</h:body>
 </html>
